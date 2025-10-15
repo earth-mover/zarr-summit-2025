@@ -56,7 +56,7 @@ def write_image(img_path: str, store):
     root = zarr.open_group(store=store, mode='a')
 
     # Calculate chunk size based on n_chunks
-    n_chunks = 5
+    n_chunks = 10
     chunk_shape = (img_arr.shape[0] // n_chunks, img_arr.shape[1] // n_chunks, img_arr.shape[2])
 
     if 'image' not in root:

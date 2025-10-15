@@ -56,7 +56,7 @@ def write_image(img_path: str, store):
     root = zarr.open_group(store=store, mode='a')
 
     # Calculate chunk size based on n_chunks
-    n_chunks = 5
+    n_chunks = 50
     chunk_shape = (img_arr.shape[0] // n_chunks, img_arr.shape[1] // n_chunks, img_arr.shape[2])
 
     if 'image' not in root:
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     store_path = Path("./test_zarr_store")
     store_path.mkdir(exist_ok=True)
     base_store = zarr.storage.LocalStore(store_path, read_only=False)
-    store = LatencyStore(base_store, set_latency=0.2)  # 200ms delay per write
+    store = LatencyStore(base_store, set_latency=0.002)  # 2ms delay per write
 
     print(f"Store location: {store_path.absolute()}\n")
 
