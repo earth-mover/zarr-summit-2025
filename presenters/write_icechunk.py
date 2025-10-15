@@ -98,11 +98,11 @@ if __name__ == "__main__":
 
         # Write alive image and commit
         print("\n=== Writing 'alive.png' ===")
-        write_image_icechunk("alive.png", session)
+        write_image_icechunk("./images/alive.png", session)
 
         # Create a new session for the next write
         session = ic_repo.writable_session("main")
 
         # Write dead image and commit
         print("\n=== Writing 'dead.png' ===")
-        write_image_icechunk("dead.png", session)
+        write_image_icechunk("./images/dead.png", session)

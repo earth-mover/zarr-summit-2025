@@ -36,7 +36,7 @@ def generate_chunk_slices(shape: tuple[int, int, int], n_chunks: int) -> Iterato
     return iter(slices)
 
 
-def write_image(img_path: str, store: zarr.storage.Store):
+def write_image(img_path: str, store):
     """Write an image to zarr store chunk by chunk in random order."""
     img_arr = mpimg.imread(img_path)
 
@@ -86,8 +86,8 @@ if __name__ == "__main__":
     while True:
         # write alive image
         print("\n=== Writing 'alive.png' ===")
-        write_image("alive.png", store)
+        write_image("./images/alive.png", store)
 
         # write dead image
         print("\n=== Writing 'dead.png' ===")
-        write_image("dead.png", store)
+        write_image("./images/dead.png", store)
