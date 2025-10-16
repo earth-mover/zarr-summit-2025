@@ -11,7 +11,6 @@ import arraylake as al
 
 # Log in to arraylake
 client = al.Client()
-client.login()
 
 # Open the Icechunk repo from the arraylake catalog
 ic_repo = client.get_repo("earthmover-demos/zarr-summit-2025")
