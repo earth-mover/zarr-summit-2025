@@ -8,7 +8,7 @@ Welcome to Earthmover's workshop at the Zarr Summit 2025! This repo contains the
 
 1. Get setup in the [Earthmover Platform](https://docs.earthmover.io/):
     1. Create a free account by [clicking here](https://app.earthmover.io/login) then clicking `Get Started`.
-    2. Log in to ArrayLake by entering `uvx run arraylake auth login` in your terminal.
+    2. Log in to ArrayLake by entering `uvx arraylake auth login` in your terminal.
 2. Get setup to run the demo locally:
     1. Clone this repository and `cd` to the top-level directory of the cloned repo.
     2. [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) on your system (`uv` is a fast python package manager).
