@@ -11,13 +11,7 @@ import matplotlib.image as mpimg
 import numpy as np
 import random
 from typing import Iterator
-from pathlib import Path
 import arraylake as al
-
-
-# Set zarr async concurrency to 1 to ensure sequential writes
-zarr.config.set({'async.concurrency': 1})
-
 
 def generate_chunk_slices(shape: tuple[int, int, int], n_chunks: int) -> Iterator[tuple[slice, ...]]:
     """
@@ -62,7 +56,7 @@ def write_image_icechunk(img_path: str, session):
     root = zarr.open_group(store=store, mode='a')
 
     # Calculate chunk size based on n_chunks
-    n_chunks = 5
+    n_chunks = 10
     chunk_shape = (img_arr.shape[0] // n_chunks, img_arr.shape[1] // n_chunks, img_arr.shape[2])
 
     if 'image' not in root:
@@ -94,7 +88,6 @@ if __name__ == "__main__":
 
     # Login to arraylake
     client = al.Client()
-    client.login()
 
     # Get the Icechunk repo from the arraylake catalog
     ic_repo = client.get_repo("earthmover-demos/zarr-summit-2025")
