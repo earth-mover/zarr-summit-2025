@@ -10,13 +10,11 @@ Welcome to Earthmover's workshop at the Zarr Summit 2025! This repo contains the
     1. Create a free account by [clicking here](https://app.earthmover.io/login) then clicking `Get Started`.
     2. Log in to ArrayLake by entering `uvx run arraylake auth login` in your terminal.
 2. Get setup to run the demo locally:
-    3. Clone this repository and `cd` to the top-level directory of the cloned repo.
-    3. [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) on your system (`uv` is a fast python package manager).
+    1. Clone this repository and `cd` to the top-level directory of the cloned repo.
+    2. [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) on your system (`uv` is a fast python package manager).
 4. Wait until the presenter indicates you should run your script.
 5. Run the demo! Try running both of these scripts locally using uv (just copy and paste the uv command into your terminal):
-    6. `uv run ./participants/read_zarr.py`
-    6. `uv run ./participants/read_icechunk.py`
+    1. `uv run ./participants/read_zarr.py`
+    2. `uv run ./participants/read_icechunk.py`
 
 Run the scripts a few more times each - what do you notice? What do you think is going on?
-
-
