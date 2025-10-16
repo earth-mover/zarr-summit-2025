@@ -1,3 +1,10 @@
+# /// script
+# dependencies = [
+#   "xarray",
+#   "matplotlib",
+#   "zarr>=3.0.0",
+# ]
+# ///
 import matplotlib.pyplot as plt
 import xarray as xr
 import zarr

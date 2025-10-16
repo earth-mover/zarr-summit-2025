@@ -3,7 +3,7 @@
 #   "zarr>=3.0.0",
 #   "matplotlib",
 #   "numpy",
-#   "arraylake",
+#   "s3fs",
 # ]
 # ///
 import zarr
@@ -11,8 +11,6 @@ import matplotlib.image as mpimg
 import numpy as np
 import random
 from typing import Iterator
-from pathlib import Path
-import arraylake as al
 
 
 # Set zarr async concurrency to 1 to ensure sequential writes
@@ -39,30 +37,24 @@ def generate_chunk_slices(shape: tuple[int, int, int], n_chunks: int) -> Iterato
 
             slices.append((slice(h_start, h_end), slice(w_start, w_end), slice(None)))
 
-    # Randomly shuffle the chunk order (same as zarr version)
+    # Randomly shuffle the chunk order (same as icechunk version)
     random.shuffle(slices)
     return iter(slices)
 
 
-def write_image_icechunk(img_path: str, session):
-    """
-    Write an image to Icechunk store chunk by chunk in random order.
-    Uses Icechunk session for ACID transactions - all chunks committed atomically.
-    """
+def write_image(img_path: str, store):
+    """Write an image to zarr store chunk by chunk in random order."""
     img_arr = mpimg.imread(img_path)
 
     # Ensure img_arr is float32 and has shape (height, width, channels)
     if img_arr.dtype != np.float32:
         img_arr = img_arr.astype(np.float32)
 
-    # Get the store from the session
-    store = session.store
-
     # Create array if it doesn't exist, or open existing
     root = zarr.open_group(store=store, mode='a')
 
     # Calculate chunk size based on n_chunks
-    n_chunks = 5
+    n_chunks = 50
     chunk_shape = (img_arr.shape[0] // n_chunks, img_arr.shape[1] // n_chunks, img_arr.shape[2])
 
     if 'image' not in root:
@@ -76,40 +68,31 @@ def write_image_icechunk(img_path: str, session):
     else:
         arr = root['image']
 
-    # Write each chunk in random order
-    # All writes happen within the same transaction
+    # Write each chunk in random order with latency
     for chunk_slice in generate_chunk_slices(shape=img_arr.shape, n_chunks=n_chunks):
         arr[chunk_slice] = img_arr[chunk_slice]
         print(f"Wrote chunk {chunk_slice}")
 
-    # Commit the transaction - this makes all writes atomic!
-    snapshot_id = session.commit(f"Updated image from {img_path}")
-    print(f"Committed transaction: {snapshot_id}")
-    return snapshot_id
-
 
 if __name__ == "__main__":
-    print("Starting Icechunk writer (with ACID transactions)...")
-    print("Writing images continuously - readers will only see complete committed snapshots!")
+    print("Starting S3 zarr writer (no ACID transactions)...")
+    print("Writing images continuously - readers may see partial updates!")
 
-    # Login to arraylake
-    client = al.Client()
-    client.login()
+    # Configure S3 store
+    s3_path = "s3://zarr-summit-italy-public/zarr3/"
+    store = zarr.storage.ObjectStore.from_url(s3_path)
 
-    # Get the Icechunk repo from the arraylake catalog
-    ic_repo = client.get_repo("earthmover-demos/zarr-summit-2025")
+    print(f"Store location: {s3_path}\n")
 
     while True:
-        # Create a new writable session for each write cycle
-        session = ic_repo.writable_session("main")
+        # Write state 1
+        state1_path = "../../presenters/images/state1.png"
+        print(f"\n=== Writing state 1 ===")
+        write_image(state1_path, store)
+        print("Write complete (no transaction commit - changes visible immediately)")
 
-        # Write alive image and commit
-        print("\n=== Writing array state 1 ===")
-        write_image_icechunk("./images/state1.png", session)
-
-        # Create a new session for the next write
-        session = ic_repo.writable_session("main")
-
-        # Write dead image and commit
-        print("\n=== Writing array state 2 ===")
-        write_image_icechunk("./images/state2.png", session)
+        # Write state 2
+        state2_path = "../../presenters/images/state2.png"
+        print(f"\n=== Writing state 2 ===")
+        write_image(state2_path, store)
+        print("Write complete (no transaction commit - changes visible immediately)")

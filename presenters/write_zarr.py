@@ -1,3 +1,10 @@
+# /// script
+# dependencies = [
+#   "zarr>=3.0.0",
+#   "matplotlib",
+#   "numpy",
+# ]
+# ///
 import zarr
 from zarr.testing.store import LatencyStore
 import matplotlib.image as mpimg

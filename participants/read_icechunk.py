@@ -1,3 +1,10 @@
+# /// script
+# dependencies = [
+#   "xarray",
+#   "matplotlib",
+#   "arraylake",
+# ]
+# ///
 import matplotlib.pyplot as plt
 import xarray as xr
 import arraylake as al
@@ -7,7 +14,7 @@ client = al.Client()
 client.login()
 
 # open the Icechunk repo from the arraylake catalog
-ic_repo = client.get_repo("earthmover-public/zarr-summit")
+ic_repo = client.get_repo("earthmover-demos/zarr-summit-2025")
 
 # start a read-only icechunk session
 session = ic_repo.readonly_session("main")
