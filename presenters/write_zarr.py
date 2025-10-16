@@ -3,15 +3,17 @@
 #   "zarr>=3.0.0",
 #   "matplotlib",
 #   "numpy",
+#   "pytest",
+#   "obstore",
 # ]
 # ///
 import zarr
+from obstore.store import S3Store
 from zarr.testing.store import LatencyStore
 import matplotlib.image as mpimg
 import numpy as np
 import random
 from typing import Iterator
-from pathlib import Path
 
 
 # Set zarr async concurrency to 1 to ensure sequential writes
@@ -52,7 +54,7 @@ def write_image(img_path: str, store):
         img_arr = img_arr.astype(np.float32)
 
     # Create array if it doesn't exist, or open existing
-    root = zarr.open_group(store=store, mode='a')
+    root = zarr.open_group(store=store, mode='a', zarr_format=3)
 
     # Calculate chunk size based on n_chunks
     n_chunks = 5
@@ -75,15 +77,10 @@ def write_image(img_path: str, store):
         print(f"Wrote chunk {chunk_slice}")
 
 
-# Configure store with latency wrapper
-store_path = Path("./zarr_store")
-store_path.mkdir(exist_ok=True)
-base_store = zarr.storage.LocalStore(store_path, read_only=False)
-store = LatencyStore(base_store, delay=0.2)  # 200ms delay per write
 
-# For S3:
-# base_store = zarr.storage.ObjectStore("s3://bucket/mystery.zarr", read_only=False)
-# store = LatencyStore(base_store, delay=0.2)
+s3_store = S3Store("zarr-summit-italy-public/zarr3", region="eu-central-1")
+base_store = zarr.storage.ObjectStore(s3_store)
+store = LatencyStore(base_store, set_latency=0.2)
 
 
 if __name__ == "__main__":
@@ -92,9 +89,9 @@ if __name__ == "__main__":
 
     while True:
         # write alive image
-        print("\n=== Writing 'alive.png' ===")
-        write_image("./images/alive.png", store)
+        print("\n=== Writing state1' ===")
+        write_image("./images/state1.png", store)
 
         # write dead image
-        print("\n=== Writing 'dead.png' ===")
-        write_image("./images/dead.png", store)
+        print("\n=== Writing state2' ===")
+        write_image("./images/state2.png", store)
