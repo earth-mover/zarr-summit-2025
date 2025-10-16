@@ -2,16 +2,14 @@
 # dependencies = [
 #   "zarr>=3.0.0",
 #   "matplotlib",
+#   "s3fs",
 # ]
 # ///
 import matplotlib.pyplot as plt
 import zarr
 
-# Open the zarr store
-store = zarr.storage.ObjectStore("s3://bucket/mystery.zarr", read_only=True)
-
 # Get all the zarr array values
-root = zarr.open_group(store=store, mode='r')
+root = zarr.open_group(store="s3://zarr-summit-italy-public/zarr3", mode='r')
 arr = root['image']
 img_data = arr[:]
 
