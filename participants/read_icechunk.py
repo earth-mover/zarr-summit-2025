@@ -1,30 +1,33 @@
 # /// script
 # dependencies = [
-#   "xarray",
+#   "zarr>=3.0.0",
 #   "matplotlib",
 #   "arraylake",
 # ]
 # ///
 import matplotlib.pyplot as plt
-import xarray as xr
+import zarr
 import arraylake as al
 
-# log in to arraylake
+# Log in to arraylake
 client = al.Client()
 client.login()
 
-# open the Icechunk repo from the arraylake catalog
+# Open the Icechunk repo from the arraylake catalog
 ic_repo = client.get_repo("earthmover-demos/zarr-summit-2025")
 
-# start a read-only icechunk session
+# Start a read-only icechunk session
 session = ic_repo.readonly_session("main")
 
-# get the zarr store
-session.store
+# Get the zarr store
+store = session.store
 
-# get all the zarr array values
-da = xr.open_zarr(session.store).load()
+# Get all the zarr array values
+root = zarr.open_group(store=store, mode='r')
+arr = root['image']
+img_data = arr[:]
 
-# plot the data
-img_array = da.plot.imshow(rbg="rgb")
+# Plot the data
+plt.imshow(img_data)
+plt.axis('off')
 plt.show()

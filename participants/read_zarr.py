@@ -1,20 +1,21 @@
 # /// script
 # dependencies = [
-#   "xarray",
-#   "matplotlib",
 #   "zarr>=3.0.0",
+#   "matplotlib",
 # ]
 # ///
 import matplotlib.pyplot as plt
-import xarray as xr
 import zarr
 
-# open the zarr store
+# Open the zarr store
 store = zarr.storage.ObjectStore("s3://bucket/mystery.zarr", read_only=True)
 
-# get all the zarr array values
-da = xr.open_zarr(store).load()
+# Get all the zarr array values
+root = zarr.open_group(store=store, mode='r')
+arr = root['image']
+img_data = arr[:]
 
-# plot the data
-img_array = da.plot.imshow(rbg="rgb")
+# Plot the data
+plt.imshow(img_data)
+plt.axis('off')
 plt.show()
