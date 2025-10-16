@@ -96,21 +96,23 @@ if __name__ == "__main__":
         # Create a writable session
         session = repo.writable_session("main")
 
-        # Write alive image
-        print("\n=== Writing 'alive.png' ===")
-        write_image("../../presenters/images/alive.png", session.store)
+        # Write state 1
+        state1_path = "../../presenters/images/state1.png"
+        print(f"\n=== Writing state 1 ===")
+        write_image(state1_path, session.store)
 
         # Commit the transaction - this makes all writes atomic!
-        snapshot_id = session.commit("Updated image from alive.png")
+        snapshot_id = session.commit("Updated to state 1")
         print(f"Committed transaction: {snapshot_id}")
 
         # Create a new writable session
         session = repo.writable_session("main")
 
-        # Write dead image
-        print("\n=== Writing 'dead.png' ===")
-        write_image("../../presenters/images/dead.png", session.store)
+        # Write state 2
+        state2_path = "../../presenters/images/state2.png"
+        print(f"\n=== Writing state 2 ===")
+        write_image(state2_path, session.store)
 
         # Commit the transaction
-        snapshot_id = session.commit("Updated image from dead.png")
+        snapshot_id = session.commit("Updated to state 2")
         print(f"Committed transaction: {snapshot_id}")

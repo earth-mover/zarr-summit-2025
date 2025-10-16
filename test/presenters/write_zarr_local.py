@@ -89,12 +89,14 @@ if __name__ == "__main__":
     print(f"Store location: {store_path.absolute()}\n")
 
     while True:
-        # Write alive image
-        print("\n=== Writing 'alive.png' ===")
-        write_image("../../presenters/images/alive.png", store)
+        # Write state 1
+        state1_path = "../../presenters/images/state1.png"
+        print(f"\n=== Writing state 1 ===")
+        write_image(state1_path, store)
         print("Write complete (no transaction commit - changes visible immediately)")
 
-        # Write dead image
-        print("\n=== Writing 'dead.png' ===")
-        write_image("../../presenters/images/dead.png", store)
+        # Write state 2
+        state2_path = "../../presenters/images/state2.png"
+        print(f"\n=== Writing state 2 ===")
+        write_image(state2_path, store)
         print("Write complete (no transaction commit - changes visible immediately)")
