@@ -18,3 +18,7 @@ Welcome to Earthmover's workshop at the Zarr Summit 2025! This repo contains the
     2. `uv run ./participants/read_icechunk.py`
 
 Run the scripts a few more times each - what do you notice? What do you think is going on?
+
+## Quickstart demo
+
+Run `uv run --with jupyter --with icechunk jupyter lab`
