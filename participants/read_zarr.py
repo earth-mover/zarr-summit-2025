@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 import zarr
 
 # Get all the zarr array values
-root = zarr.open_group(store="s3://zarr-summit-italy-public/zarr3", mode='r')
+store = zarr.storage.FsspecStore.from_url("s3://zarr-summit-italy-public/zarr3", storage_options={'anon': True})
+root = zarr.open_group(store=store, mode='r')
 arr = root['image']
 img_data = arr[:]
 
